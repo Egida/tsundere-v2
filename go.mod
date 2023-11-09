@@ -11,6 +11,7 @@ require (
 
 require (
 	github.com/charmbracelet/lipgloss v0.8.0
+	github.com/mattn/go-shellwords v1.0.12
 	github.com/valyala/fasttemplate v1.2.2
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
 	gopkg.in/yaml.v3 v3.0.1

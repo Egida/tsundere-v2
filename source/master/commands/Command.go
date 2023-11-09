@@ -9,6 +9,8 @@ import (
 
 var (
 	ErrCommandAlreadyRegistered = errors.New("command already registered")
+	ErrArgumentNotRegistered    = errors.New("argument not registered")
+	ErrArgumentInvalidType      = errors.New("tried to get argument of invalid type")
 
 	Commands = make(map[int]*Command)
 )

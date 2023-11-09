@@ -5,6 +5,7 @@ type ArgumentType int
 const (
 	ArgumentString ArgumentType = iota
 	ArgumentInteger
+	ArgumentBoolean
 	ArgumentUser
 )
 

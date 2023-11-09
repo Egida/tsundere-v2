@@ -13,6 +13,14 @@ func init() {
 			},
 		},
 		Executor: func(session *sessions.Session, args []string, ctx *CommandContext) {
+			session.Terminal.Channel.Write([]byte("test\r\n"))
+
+			s, err := ctx.String("prefix")
+			if err != nil {
+				return
+			}
+
+			session.Terminal.Channel.Write([]byte(s + "\r\n"))
 
 		},
 	})

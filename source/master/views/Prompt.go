@@ -2,9 +2,13 @@ package views
 
 import (
 	"fmt"
+	"github.com/mattn/go-shellwords"
 	"log"
+	"time"
 	"tsundere/packages/utilities/sshd"
 	"tsundere/source/database"
+	"tsundere/source/master/commands"
+	"tsundere/source/master/sessions"
 )
 
 func Prompt(terminal *sshd.Terminal) {
@@ -22,6 +26,28 @@ func Prompt(terminal *sshd.Terminal) {
 			return
 		}
 
-		fmt.Println(line)
+		args, err := shellwords.Parse(line)
+		if err != nil {
+			return
+		}
+
+		cmd := commands.CommandByName(args[0])
+		if cmd == nil {
+			continue
+		}
+
+		args = args[1:]
+
+		arguments, err := commands.ParseArguments(cmd, args)
+		if err != nil {
+			return
+		}
+
+		cmd.Executor(&sessions.Session{
+			ID:          0,
+			Terminal:    terminal,
+			UserProfile: nil,
+			Created:     time.Time{},
+		}, args, arguments)
 	}
 }
