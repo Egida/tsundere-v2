@@ -1,5 +1,5 @@
 {
 	"server.address": ":7700",
 	"server.private_key": "resources/ssh.ppk",
-	"server.custom_login": true
+	"server.custom_login": false
 }

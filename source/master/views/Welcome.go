@@ -2,33 +2,27 @@ package views
 
 import (
 	"log"
-	"tsundere/packages/customization/termengine"
-	"tsundere/packages/customization/termengine/mouse"
+	"strings"
+	"tsundere/packages/customization/goterm2lite"
 	"tsundere/packages/utilities/sshd"
+	"tsundere/source/master/views/styles"
 )
 
 func Welcome(terminal *sshd.Terminal) {
-	var engine = termengine.New(terminal.Channel, 80, 20)
+	terminal.Channel.Write([]byte("\u001B]0;tsundere.dev | Login\007"))
+	terminal.Channel.Write([]byte("\x1bc"))
 
-	engine.DefaultButton(15, 2, func(event *mouse.Event) bool {
-		if event.Click == mouse.ScrollClick || event.Click == mouse.ScrollDown || event.Click == mouse.ScrollUp {
-			return false
-		}
+	// initialize goterm2lite instance for login page
+	var term = goterm2lite.New(terminal.Channel, 81, 20)
 
-		log.Println("This button has been clicked.", event.Click.String())
-
+	term.NewButton(3, 3, strings.Split(styles.SmallButton.Render("Test"), "\n")...).OnClick(func() bool {
+		log.Println("button clicked :(")
 		return false
-	}, "Button")
+	})
 
-	err := engine.Run()
-	if err != nil {
-		return
-	}
-}
-
-func Place(terminal *sshd.Terminal, width, height int, text string) {
-	defer terminal.Channel.Write([]byte("\x1b[?1000l"))
-	if _, err := terminal.Channel.Write([]byte(text + "\033[?1000h\033[?25l")); err != nil {
+	// run goterm2lite
+	if err := term.Run(); err != nil {
+		log.Println(err)
 		return
 	}
 }

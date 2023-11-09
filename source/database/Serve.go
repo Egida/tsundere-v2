@@ -44,7 +44,7 @@ func serve() error {
 		Expiry:      time.Now().Add(99999 * time.Hour),
 		Roles:       []string{"admin"},
 		CreatedBy:   "SQLite3",
-	}, true)
+	})
 	if err != nil && !errors.Is(err, ErrKnownUser) {
 		return err
 	}

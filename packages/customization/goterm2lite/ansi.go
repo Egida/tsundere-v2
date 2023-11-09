@@ -1,4 +1,4 @@
-package termengine
+package goterm2lite
 
 import (
 	"regexp"

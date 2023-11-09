@@ -16,6 +16,10 @@ func (s *Server) Serve() error {
 	log.Printf("SSH server is now listening for connections on %s", sshListener.Addr().String())
 
 	sshListener.HandlerFunc = views.Welcome
+	if !s.Config.CustomLogin {
+		sshListener.HandlerFunc = views.Prompt
+	}
+
 	sshListener.Serve()
 	return nil
 }
