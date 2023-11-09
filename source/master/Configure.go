@@ -6,6 +6,7 @@ import (
 	"os"
 	"tsundere/source"
 	"tsundere/source/database"
+	"tsundere/source/master/commands/impls"
 )
 
 func Configure() error {
@@ -44,6 +45,9 @@ func Configure() error {
 			return nil, database.VerifyCredentials(conn.User(), string(password))
 		}
 	}
+
+	// command impls
+	impls.Init()
 
 	return server.Serve()
 }

@@ -3,7 +3,7 @@ package evaluator
 import (
 	"fmt"
 	"io"
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 
 	"github.com/valyala/fasttemplate"
 )

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 	"unicode"
 )
 

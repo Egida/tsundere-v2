@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"io"
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 )
 
 /*

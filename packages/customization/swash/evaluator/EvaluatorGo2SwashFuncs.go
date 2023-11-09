@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 )
 
 // GoFunc represents the function internally for memory allocation processing

@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"time"
+	"tsundere/source/models/roles"
 )
 
 var (
@@ -26,11 +27,12 @@ type UserProfile struct {
 }
 
 func (u *UserProfile) HasRole(name string) bool {
-	/*for _, role := range u.Roles {
-		if configuration.Roles.RoleExists(role) && role == name {
+	for _, role := range u.Roles {
+		_, exists := roles.List[name]
+		if exists && role == name {
 			return true
 		}
-	}*/
+	}
 
 	return false
 }

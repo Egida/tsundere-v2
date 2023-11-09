@@ -5,6 +5,7 @@ import (
 	"golang.org/x/exp/slices"
 	"log"
 	"tsundere/source/master/sessions"
+	"tsundere/source/master/sessions/swashengine"
 )
 
 var (
@@ -16,22 +17,26 @@ var (
 	Commands = make(map[int]*Command)
 )
 
+// Command is a simple command
 type Command struct {
-	Aliases   []string
-	Roles     []string
-	Arguments []*Argument
+	Aliases        []string
+	Roles          []string
+	Arguments      []*Argument
+	ForceArguments bool
 
 	// Executor is the executor of the command
-	Executor func(session *sessions.Session, args []string, ctx *CommandContext)
+	Executor func(session *sessions.Session, engine *swashengine.SwashEngine, ctx *CommandContext) error
 }
 
-func Create(command *Command) {
+// Create adds a command to the registry
+func Create(command *Command) *Command {
 	if CommandByName(command.Aliases[0]) != nil {
 		log.Println("Failed to register command: ", ErrCommandAlreadyRegistered)
-		return
+		return nil
 	}
 
 	Commands[len(Commands)+1] = command
+	return command
 }
 
 // CommandByName gets a command by its name

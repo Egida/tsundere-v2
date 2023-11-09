@@ -3,7 +3,7 @@ package swash_test
 import (
 	"strings"
 	"testing"
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 )
 
 /*

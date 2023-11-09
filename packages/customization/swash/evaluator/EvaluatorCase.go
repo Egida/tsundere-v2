@@ -1,7 +1,7 @@
 package evaluator
 
 import (
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 )
 
 // decision will execute the if statements directly.

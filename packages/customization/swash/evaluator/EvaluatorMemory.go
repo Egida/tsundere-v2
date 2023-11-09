@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 	"strings"
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 )
 
 /*

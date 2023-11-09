@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"tsundere/packages/swash"
-	"tsundere/packages/swash/packages"
+	"tsundere/packages/customization/swash"
+	"tsundere/packages/customization/swash/packages"
 	"unicode/utf8"
 )
 

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"tsundere/packages/swash"
+	"tsundere/packages/customization/swash"
 )
 
 /*

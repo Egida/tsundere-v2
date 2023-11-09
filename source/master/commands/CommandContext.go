@@ -7,6 +7,7 @@ import (
 
 type CommandContext struct {
 	arguments map[string]*ParsedArgument
+	rawArgs   []string
 }
 
 func (ctx *CommandContext) User(name string) (*database.UserProfile, error) {
@@ -73,4 +74,12 @@ func (ctx *CommandContext) get(name string, typeToGet ArgumentType) (string, err
 	}
 
 	return parsedArgument.Value, nil
+}
+
+func (ctx *CommandContext) ParsedCount() int {
+	return len(ctx.arguments)
+}
+
+func (ctx *CommandContext) Count() int {
+	return len(ctx.rawArgs)
 }
