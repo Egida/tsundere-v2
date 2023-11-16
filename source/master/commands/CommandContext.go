@@ -7,6 +7,7 @@ import (
 type CommandContext struct {
 	arguments map[string]*ParsedArgument
 	rawArgs   []string
+	parent    *Command
 }
 
 func (ctx *CommandContext) User(name string) (*database.UserProfile, error) {
@@ -66,4 +67,8 @@ func (ctx *CommandContext) ParsedCount() int {
 
 func (ctx *CommandContext) Count() int {
 	return len(ctx.rawArgs)
+}
+
+func (ctx *CommandContext) Parent() *Command {
+	return ctx.parent
 }

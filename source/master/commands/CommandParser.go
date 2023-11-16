@@ -1,11 +1,16 @@
 package commands
 
 // NewContext creates a new command context with parsed arguments
-func NewContext(cmd *Command, arguments ...string) (*CommandContext, error) {
+func NewContext(parent *Command, cmd *Command, arguments ...string) (*CommandContext, error) {
 	// create new command context
 	var ctx = new(CommandContext)
 	ctx.arguments = make(map[string]*ParsedArgument)
 	ctx.rawArgs = arguments
+	ctx.parent = parent
+
+	if cmd.Arguments == nil {
+		return ctx, nil
+	}
 
 	// iterate through all registered arguments
 	for pos, argument := range cmd.Arguments {

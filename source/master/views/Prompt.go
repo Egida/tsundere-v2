@@ -74,7 +74,7 @@ func Prompt(terminal *sshd.Terminal) {
 		}
 
 		// get command by name
-		command, index, err := commands.Parse(session.UserProfile, args...)
+		parent, command, index, err := commands.Parse(session.UserProfile, args...)
 		if err != nil {
 			if err1 := session.Println(err); err1 != nil {
 				return
@@ -84,7 +84,7 @@ func Prompt(terminal *sshd.Terminal) {
 		}
 
 		// create a new command context aka. argument parser
-		context, err := commands.NewContext(command, args[index:]...)
+		context, err := commands.NewContext(parent, command, args[index:]...)
 		if err != nil {
 			if err1 := session.Println(err); err1 != nil {
 				return

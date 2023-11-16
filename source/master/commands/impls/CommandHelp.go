@@ -8,7 +8,7 @@ import (
 func init() {
 	commands.Create(&commands.Command{
 		Aliases: []string{"help", "?"},
-		Commands: []*commands.Command{
+		SubCommands: []*commands.Command{
 			{
 				Aliases: []string{"admin"},
 				Executor: func(session *sessions.Session, ctx *commands.CommandContext) error {
