@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"strconv"
 	"tsundere/source/database"
 )
 
@@ -16,12 +15,7 @@ func (ctx *CommandContext) User(name string) (*database.UserProfile, error) {
 		return nil, err
 	}
 
-	user, err := database.UserFromName(value)
-	if err != nil {
-		return nil, err
-	}
-
-	return user, nil
+	return value.(*database.UserProfile), nil
 }
 
 func (ctx *CommandContext) String(name string) (string, error) {
@@ -30,21 +24,16 @@ func (ctx *CommandContext) String(name string) (string, error) {
 		return "", err
 	}
 
-	return value, nil
+	return value.(string), nil
 }
 
 func (ctx *CommandContext) Integer(name string) (int, error) {
 	value, err := ctx.get(name, ArgumentInteger)
 	if err != nil {
-		return -1, err
-	}
-
-	v, err := strconv.Atoi(value)
-	if err != nil {
 		return 0, err
 	}
 
-	return v, nil
+	return value.(int), nil
 }
 
 func (ctx *CommandContext) Boolean(name string) (bool, error) {
@@ -53,16 +42,11 @@ func (ctx *CommandContext) Boolean(name string) (bool, error) {
 		return false, err
 	}
 
-	v, err := strconv.ParseBool(value)
-	if err != nil {
-		return false, err
-	}
-
-	return v, nil
+	return value.(bool), nil
 }
 
 // get gets value(s) from a name
-func (ctx *CommandContext) get(name string, typeToGet ArgumentType) (string, error) {
+func (ctx *CommandContext) get(name string, typeToGet ArgumentType) (any, error) {
 	parsedArgument, exists := ctx.arguments[name]
 
 	if !exists {

@@ -1,5 +1,5 @@
 package sessions
 
-func (session *Session) Remove() {
-	delete(sessions, session.ID)
+func (s *Session) Remove() {
+	delete(sessions, s.ID)
 }

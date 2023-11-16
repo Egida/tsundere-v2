@@ -1,49 +1,51 @@
 package commands
 
-// NewContext creates a new command context
-func NewContext(cmd *Command, arguments []string) (*CommandContext, error) {
+// NewContext creates a new command context with parsed arguments
+func NewContext(cmd *Command, arguments ...string) (*CommandContext, error) {
 	// create new command context
 	var ctx = new(CommandContext)
 	ctx.arguments = make(map[string]*ParsedArgument)
 	ctx.rawArgs = arguments
 
-	if len(cmd.Arguments) < 1 {
-		return ctx, nil
-	}
+	// iterate through all registered arguments
+	for pos, argument := range cmd.Arguments {
+		// check if there are enough arguments provided
+		if len(arguments) <= pos || len(arguments[pos:]) <= 0 {
+			// if the argument is not required, check if there is a default one
+			// and if there is not we just continue without doing anything...
+			if !argument.Required {
+				// check if we have a default value... we talked about that above.
+				if argument.Default != nil {
+					ctx.arguments[argument.Name] = &ParsedArgument{
+						Type:  argument.Type,
+						Value: argument.Default,
+					}
+				}
 
-	// force arguments, shit code but it works
-	if !cmd.ForceArguments && len(arguments) < len(cmd.Arguments) {
-		for i, arg := range arguments {
-			if i > len(cmd.Arguments) {
 				continue
 			}
 
-			argument := cmd.Arguments[i]
-
-			ctx.arguments[argument.Name] = &ParsedArgument{
-				Type:  argument.Type,
-				Value: arg,
-			}
+			return nil, ErrArgumentRequired
 		}
 
-		return ctx, nil
-	}
-
-	if cmd.ForceArguments && len(arguments) < len(cmd.Arguments) {
-		return nil, ErrNotEnoughArguments
-	}
-
-	for i, argument := range cmd.Arguments {
-		var arg string
-		if i < len(arguments) {
-			arg = arguments[i]
+		// skip the iteration if the pos index is above the available arguments
+		if pos >= len(arguments) {
+			continue
 		}
 
+		// convert a raw string argument to a go type
+		converted, err := argument.Literal2Go(arguments[pos:][0])
+		if err != nil || converted == nil {
+			return nil, err
+		}
+
+		// add parsed argument to context
 		ctx.arguments[argument.Name] = &ParsedArgument{
 			Type:  argument.Type,
-			Value: arg,
+			Value: converted,
 		}
 	}
 
+	// return the context
 	return ctx, nil
 }

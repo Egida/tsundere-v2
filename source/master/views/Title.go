@@ -5,10 +5,9 @@ import (
 	"time"
 	"tsundere/source/database"
 	"tsundere/source/master/sessions"
-	"tsundere/source/master/sessions/swashengine"
 )
 
-func titleWorker(session *sessions.Session, swashEngine *swashengine.SwashEngine, cancel chan struct{}) {
+func titleWorker(session *sessions.Session, cancel chan struct{}) {
 	// new ticker
 	ticker := time.NewTicker(1 * time.Second)
 
@@ -32,9 +31,9 @@ func titleWorker(session *sessions.Session, swashEngine *swashengine.SwashEngine
 
 			if n, err := session.Channel.Write([]byte(
 				fmt.Sprintf("\033]0;%s\007",
-					swashEngine.ExecuteString(
+					session.ExecuteBrandingToStringNoError(
+						make(map[string]any),
 						"title.tfx",
-						swashEngine.Elements(nil),
 					),
 				),
 			)); err != nil || n <= 0 {

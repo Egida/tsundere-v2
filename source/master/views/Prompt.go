@@ -9,7 +9,6 @@ import (
 	"tsundere/source/database"
 	"tsundere/source/master/commands"
 	"tsundere/source/master/sessions"
-	"tsundere/source/master/sessions/swashengine"
 )
 
 func Prompt(terminal *sshd.Terminal) {
@@ -39,23 +38,21 @@ func Prompt(terminal *sshd.Terminal) {
 		Created:     time.Now(),
 	})
 
-	swashEngine := swashengine.New(session)
-
 	// start title worker
-	go titleWorker(session, swashEngine, cancel)
+	go titleWorker(session, cancel)
 
 	// clear screen
 	if err := session.Clear(); err != nil {
 		return
 	}
 
-	if err := swashEngine.Execute("banner.tfx", true, swashEngine.Elements(nil)); err != nil {
+	if err := session.ExecuteBranding(make(map[string]any), "banner.tfx"); err != nil {
 		return
 	}
 
 	for {
 		// set prompt properly
-		terminal.SetPrompt(swashEngine.ExecuteString("prompt.tfx", swashEngine.Elements(nil)))
+		terminal.SetPrompt(session.ExecuteBrandingToStringNoError(make(map[string]any), "prompt.tfx"))
 
 		line, err := terminal.ReadLine()
 		if err != nil {
@@ -77,9 +74,9 @@ func Prompt(terminal *sshd.Terminal) {
 		}
 
 		// get command by name
-		command := commands.CommandByName(args[0])
-		if command == nil {
-			if err := session.Printf("%s: command not found\r\n", args[0]); err != nil {
+		command, index, err := commands.Parse(session.UserProfile, args...)
+		if err != nil {
+			if err1 := session.Println(err); err1 != nil {
 				return
 			}
 
@@ -87,9 +84,9 @@ func Prompt(terminal *sshd.Terminal) {
 		}
 
 		// create a new command context aka. argument parser
-		context, err := commands.NewContext(command, args[1:])
+		context, err := commands.NewContext(command, args[index:]...)
 		if err != nil {
-			if xErr := session.Println(err); xErr != nil {
+			if err1 := session.Println(err); err1 != nil {
 				return
 			}
 
@@ -97,8 +94,8 @@ func Prompt(terminal *sshd.Terminal) {
 		}
 
 		// execute command
-		if err := command.Executor(session, swashEngine, context); err != nil {
-			if xErr := session.Println(err); xErr != nil {
+		if err := command.Executor(session, context); err != nil {
+			if err1 := session.Println(err); err1 != nil {
 				return
 			}
 

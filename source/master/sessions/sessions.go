@@ -20,29 +20,29 @@ type Session struct {
 	Created time.Time
 }
 
-func (session *Session) Print(a ...interface{}) error {
-	_, err := session.Channel.Write([]byte(fmt.Sprint(a...)))
+func (s *Session) Print(a ...interface{}) error {
+	_, err := s.Channel.Write([]byte(fmt.Sprint(a...)))
 	return err
 }
 
-func (session *Session) Printf(format string, val ...any) error {
-	_, err := session.Channel.Write([]byte(fmt.Sprintf(format, val...)))
+func (s *Session) Printf(format string, val ...any) error {
+	_, err := s.Channel.Write([]byte(fmt.Sprintf(format, val...)))
 	return err
 }
 
-func (session *Session) Println(a ...interface{}) error {
-	_, err := session.Channel.Write([]byte(fmt.Sprint(a...) + "\r\n"))
+func (s *Session) Println(a ...interface{}) error {
+	_, err := s.Channel.Write([]byte(fmt.Sprint(a...) + "\r\n"))
 	return err
 }
 
-func (session *Session) Clear() error {
-	_, err := session.Channel.Write([]byte("\033c"))
+func (s *Session) Clear() error {
+	_, err := s.Channel.Write([]byte("\033c"))
 	return err
 }
 
-func (session *Session) Close() {
-	session.Conn.Close()
-	session.Remove()
+func (s *Session) Close() {
+	s.Conn.Close()
+	s.Remove()
 }
 
 func SessionByName(name string) *Session {
